@@ -68,7 +68,7 @@ impl AppManagerInner {
         if app_id >= self.num_app {
             panic!("All applications completed!");
         }
-        println!("[kernal]Loading app_{}", app_id);
+        println!("[kernel] Loading app_{}", app_id);
         //clear icache
         llvm_asm!("fence.i" :::: "volatile");
         //clear app data
@@ -83,9 +83,9 @@ impl AppManagerInner {
             APP_BASE_ADDRESS as *mut u8,
             app_src.len()
         );
-        debug!("app_dst_1: {:?}", app_dst);
+        // debug!("app_dst_1: {:?}", app_dst);
         app_dst.copy_from_slice(app_src);
-        debug!("app_dst_2: {:?}", app_dst);
+        // debug!("app_dst_2: {:?}", app_dst);
     }
 }
 

@@ -31,7 +31,7 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
         Trap::Exception(Exception::UserEnvCall) => {
             cx.sepc += 4;
             cx.x[10] = syscall(cx.x[17], [cx.x[10], cx.x[11], cx.x[12]]) as usize;
-            info!("[kernal] Call from UserEnv, id = {}", cx.x[17]);
+            // info!("[kernal] Call from UserEnv, id = {}", cx.x[17]);
         }
         Trap::Exception(Exception::StoreFault) |
         Trap::Exception(Exception::StorePageFault) => {
@@ -39,7 +39,7 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
             run_next_app();
         }
         Trap::Exception(Exception::IllegalInstruction) => {
-            println!("[kernal] IllegalInstruction in an application, core dumped.");
+            println!("[kernel] IllegalInstruction in an application, core dumped.");
             run_next_app();
         }
         _ => {
