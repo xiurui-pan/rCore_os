@@ -3,6 +3,8 @@
 #![feature(global_asm)]
 #![feature(llvm_asm)]
 #![feature(panic_info_message)]
+#![allow(dead_code)]
+#![allow(deprecated)]
 
 #[macro_use]
 mod console;
@@ -28,6 +30,20 @@ fn clear_bss() {
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
+    // extern "C" {
+    //     fn stext();
+    //     fn etext();
+    //     fn srodata();
+    //     fn erodata();
+    //     fn sdata();
+    //     fn edata();
+    //     fn sbss();
+    //     fn ebss();
+    // }
+    // println!("[kernel] .text [{:#x}, {:#x})", stext as usize, etext as usize);
+    // println!("[kernel] .rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
+    // println!("[kernel] .data [{:#x}, {:#x})", sdata as usize, edata as usize);
+    // println!("[kernel] .bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
     println!("[kernel] Hello world!");
     trap::init();
     batch::init();

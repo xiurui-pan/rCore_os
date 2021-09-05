@@ -1,5 +1,3 @@
-#![feature(llvm_asm)]
-
 use core::cell::RefCell;
 use lazy_static::*;
 use crate::trap::TrapContext;
@@ -7,8 +5,8 @@ use crate::trap::TrapContext;
 const MAX_APP_NUM: usize = 16;
 const APP_BASE_ADDRESS: usize = 0x80400000;
 const APP_SIZE_LIMIT: usize = 0x20000;
-const USER_STACK_SIZE: usize = 4096 * 2;
-const KERNAL_STACK_SIZE: usize = 4096 * 2;
+const USER_STACK_SIZE: usize = 0x1000;
+const KERNAL_STACK_SIZE: usize = 0x1000;
 
 #[repr(align(4096))]
 struct KernalStack {
@@ -39,6 +37,10 @@ impl KernalStack {
             cx_ptr.as_mut().unwrap()
         }
     }
+}
+
+pub fn get_user_stack_sp() -> usize {
+    USER_STACK.data.as_ptr() as usize + USER_STACK_SIZE
 }
 
 struct AppManager {
@@ -123,12 +125,10 @@ pub fn run_next_app() -> ! {
         APP_MANAGER.inner.borrow().load_app(current_app);
     }
     APP_MANAGER.inner.borrow_mut().move_to_next_app();
-    info!("Moved to next app: {}", APP_MANAGER.inner.borrow().current_app);
     extern "C" {
         fn __restore(cx_addr: usize);
     }
     unsafe {
-        info!("__restore() called !");
         __restore(KERNAL_STACK.push_context(
             TrapContext::app_init_context(APP_BASE_ADDRESS, USER_STACK.get_sp())
         )as *const _ as usize);

@@ -42,6 +42,11 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
             println!("[kernel] IllegalInstruction in an application, core dumped.");
             run_next_app();
         }
+        Trap::Exception(Exception::LoadFault) | 
+        Trap::Exception(Exception::LoadPageFault) => {
+            println!("[kernel] LoadFault in application, core dumped.");
+            run_next_app();
+        }
         _ => {
             panic!("Unsupported trap {:?}, stval = {:#x}!", scause.cause(), stval);
         }
