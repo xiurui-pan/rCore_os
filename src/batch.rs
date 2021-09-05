@@ -123,10 +123,12 @@ pub fn run_next_app() -> ! {
         APP_MANAGER.inner.borrow().load_app(current_app);
     }
     APP_MANAGER.inner.borrow_mut().move_to_next_app();
+    info!("Moved to next app: {}", APP_MANAGER.inner.borrow().current_app);
     extern "C" {
         fn __restore(cx_addr: usize);
     }
     unsafe {
+        info!("__restore() called !");
         __restore(KERNAL_STACK.push_context(
             TrapContext::app_init_context(APP_BASE_ADDRESS, USER_STACK.get_sp())
         )as *const _ as usize);
