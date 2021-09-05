@@ -33,7 +33,7 @@ macro_rules! println {
 #[macro_export]
 macro_rules! error {
     ($fmt: literal $(, $($arg: tt)+)?) => {
-        $crate::console::print(format_args!(concat!("\x1b[31m[WRROR]", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
+        $crate::console::print(format_args!(concat!("\x1b[31m[ERROR]", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
     }
 }
 

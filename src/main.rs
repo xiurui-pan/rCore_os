@@ -8,8 +8,12 @@
 mod console;
 mod lang_items;
 mod sbi;
+mod trap;
+mod syscall;
+mod batch;
 
 global_asm!(include_str!("entry.asm"));
+global_asm!(include_str!("link_app.S"));
 
 fn clear_bss() {
     extern "C" {
@@ -23,23 +27,9 @@ fn clear_bss() {
 
 #[no_mangle]
 pub fn rust_main() -> ! {
-    extern "C" {
-        fn stext();
-        fn etext();
-        fn srodata();
-        fn erodata();
-        fn sdata();
-        fn edata();
-        fn sbss();
-        fn ebss();
-        fn boot_stack();
-        fn boot_stack_top();
-    }
     clear_bss();
-    info!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
-    info!("boot stack: [{:#x}, {:#x}]", boot_stack as usize, boot_stack_top as usize);
-    info!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
-    info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
-    panic!("It should shutdown!")
-    //sbi::shutdown()
+    println!("[kernal] Hello world!");
+    trap::init();
+    batch::init();
+    batch::run_next_app();
 }
