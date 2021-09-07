@@ -1,4 +1,4 @@
-use crate::batch::get_user_stack_sp;
+use crate::loader::get_user_stack_sp;
 
 const FD_STDOUT: usize = 1;
 const USER_STACK_SIZE: usize = 0x1000;

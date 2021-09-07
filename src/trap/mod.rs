@@ -11,7 +11,7 @@ use riscv::register::{
     stval,
 };
 use crate::syscall::syscall;
-use crate::batch::run_next_app;
+use crate::task::exit_current_and_run_next;
 pub use context::TrapContext;
 
 global_asm!(include_str!("trap.S"));
@@ -35,17 +35,17 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
         }
         Trap::Exception(Exception::StoreFault) |
         Trap::Exception(Exception::StorePageFault) => {
-            println!("[kernel] PageFault in application, core dumped.");
-            run_next_app();
+            println!("[kernel] StorePageFault in application, bad addr = {:#x}, bad instruction = {:#x}, core dumped.", stval, cx.sepc);
+            exit_current_and_run_next();
         }
         Trap::Exception(Exception::IllegalInstruction) => {
             println!("[kernel] IllegalInstruction in an application, core dumped.");
-            run_next_app();
+            exit_current_and_run_next();
         }
         Trap::Exception(Exception::LoadFault) | 
         Trap::Exception(Exception::LoadPageFault) => {
-            println!("[kernel] LoadFault in application, core dumped.");
-            run_next_app();
+            println!("[kernel] LoadPageFault in application, bad addr = {:#x}, bad instruction = {:#x}, core dumped.", stval, cx.sepc);
+            exit_current_and_run_next();
         }
         _ => {
             panic!("Unsupported trap {:?}, stval = {:#x}!", scause.cause(), stval);

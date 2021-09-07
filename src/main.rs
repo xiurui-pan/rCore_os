@@ -12,7 +12,9 @@ mod lang_items;
 mod sbi;
 mod trap;
 mod syscall;
-mod batch;
+mod task;
+mod loader;
+mod config;
 
 global_asm!(include_str!("entry.asm"));
 global_asm!(include_str!("link_app.S"));
@@ -30,22 +32,9 @@ fn clear_bss() {
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
-    // extern "C" {
-    //     fn stext();
-    //     fn etext();
-    //     fn srodata();
-    //     fn erodata();
-    //     fn sdata();
-    //     fn edata();
-    //     fn sbss();
-    //     fn ebss();
-    // }
-    // println!("[kernel] .text [{:#x}, {:#x})", stext as usize, etext as usize);
-    // println!("[kernel] .rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
-    // println!("[kernel] .data [{:#x}, {:#x})", sdata as usize, edata as usize);
-    // println!("[kernel] .bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
-    println!("[kernel] Hello world!");
+    println!("[kernel] Hello, world!");
     trap::init();
-    batch::init();
-    batch::run_next_app();
+    loader::load_apps();
+    task::run_first_task();
+    panic!("Unreachable in rust_main!");
 }
