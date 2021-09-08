@@ -2,6 +2,7 @@ use crate::task::{
     exit_current_and_run_next,
     suspend_current_and_run_next
 };
+use crate::timer::get_time_ms;
 
 pub fn sys_exit(xstate: i32) -> !{
     println!("[kernel] Application exited with code {}", xstate);
@@ -12,4 +13,8 @@ pub fn sys_exit(xstate: i32) -> !{
 pub fn sys_yield() -> isize {
     suspend_current_and_run_next();
     0
+}
+
+pub fn sys_gettime() -> isize {
+    get_time_ms() as isize
 }
