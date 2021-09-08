@@ -32,16 +32,16 @@ DISASM ?= -x
 build: env $(KERNEL_BIN)
 
 env:
-	rustup component add rust-src
-	rustup component add llvm-tools-preview
-	cargo install cargo-binutils --vers ~0.2
-	rustup target add riscv64gc-unknown-none-elf
+# rustup component add rust-src
+# rustup component add llvm-tools-preview
+# cargo install cargo-binutils --vers ~0.2
+# rustup target add riscv64gc-unknown-none-elf
 
 $(KERNEL_BIN): kernel
 	@$(OBJCOPY) $(KERNEL_ELF) --strip-all -O binary $@
 
 kernel:
-	@cd ../user && make build
+#	@cd ../user && make build
 	@echo Platform: $(BOARD)
 	@cp src/linker-$(BOARD).ld src/linker.ld
 	@cargo build --release
