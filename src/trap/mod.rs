@@ -39,7 +39,7 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
             exit_current_and_run_next();
         }
         Trap::Exception(Exception::IllegalInstruction) => {
-            println!("[kernel] IllegalInstruction in an application, core dumped.");
+            println!("[kernel] IllegalInstruction in an application: {:#x}, core dumped.", cx.sepc);
             exit_current_and_run_next();
         }
         Trap::Exception(Exception::LoadFault) | 

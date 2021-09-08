@@ -24,7 +24,7 @@ pub fn sys_write(fd: usize, buf: *const u8, len: usize) -> isize {
                 in_range_flag = 1;
             }
             if in_range_flag == 0 {
-                error!("You are writing an invalid address in the stack!");
+                error!("Writing an invalid address in the stack!, {:#x} -> {:#x}", buf_u, buf_u+len);
                 return -1;
             }
 
