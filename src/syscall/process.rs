@@ -3,12 +3,13 @@ use crate::task::{
     suspend_current_and_run_next,
     get_current_task
 };
-use crate::timer::get_time_ms;
+use crate::timer::{gettime,};
 
 pub fn sys_exit(xstate: i32) -> !{
     println!("[kernel] Application {} exited with code {}", get_current_task(), xstate);
     exit_current_and_run_next();
     panic!("Unreachable in sys_exit!");
+
 }
 
 pub fn sys_yield() -> isize {
@@ -16,6 +17,7 @@ pub fn sys_yield() -> isize {
     0
 }
 
-pub fn sys_gettime() -> isize {
-    get_time_ms() as isize
+pub fn sys_gettime(ts: *mut usize) -> isize {
+    gettime(ts)
+    
 }

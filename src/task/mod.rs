@@ -76,7 +76,7 @@ lazy_static! {
     pub static ref TASK_MANAGER: TaskManager = {
         let num_app = get_num_app();
         let mut tasks = [
-            TaskControlBlock { task_cx_ptr: 0, task_status: TaskStatus::UnInit };
+            TaskControlBlock { task_cx_ptr: 0, task_status: TaskStatus::UnInit, running_time: 0 };
             MAX_APP_NUM
         ];
         for i in 0..num_app {
@@ -91,6 +91,13 @@ lazy_static! {
             }),
         }
     };
+}
+
+pub fn count_time() -> usize {
+    let current_task = get_current_task();
+    let mut inner = TASK_MANAGER.inner.borrow_mut();
+    inner.tasks[current_task].running_time += 1;
+    inner.tasks[current_task].running_time
 }
 
 pub fn run_first_task(){

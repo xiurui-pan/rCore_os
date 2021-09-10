@@ -12,6 +12,7 @@ pub enum TaskStatus {
 pub struct TaskControlBlock {
     pub task_cx_ptr: usize,
     pub task_status: TaskStatus,
+    pub running_time: usize,
 }
 
 impl TaskControlBlock {

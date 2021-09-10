@@ -4,7 +4,7 @@ build:
 	rust-objcopy --binary-architecture=riscv64 target/riscv64gc-unknown-none-elf/debug/os --strip-all -O binary target/riscv64gc-unknown-none-elf/debug/os.bin 
 
 build-release:
-	rm -rf ./target
+#	rm -rf ./target
 
 	cargo build --release
 
