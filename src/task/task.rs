@@ -1,6 +1,6 @@
 
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub enum TaskStatus {
     UnInit,
     Ready,
@@ -12,7 +12,9 @@ pub enum TaskStatus {
 pub struct TaskControlBlock {
     pub task_cx_ptr: usize,
     pub task_status: TaskStatus,
-    pub running_time: usize,
+    pub pass: usize,
+    pub next_pass: usize,
+    pub priority: isize,
 }
 
 impl TaskControlBlock {

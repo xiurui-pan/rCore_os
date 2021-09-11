@@ -15,16 +15,13 @@ use riscv::register::{
 use crate::syscall::syscall;
 use crate::task::{
     exit_current_and_run_next,
-    suspend_current_and_run_next,
-    count_time,
+    schedule_tasks,
 };
 pub use context::TrapContext;
 use crate::timer::{
     set_next_trigger,
-    TICKS_PER_SEC,
 };
 
-const MAX_RUNNING_TIME: usize = 5;
 
 global_asm!(include_str!("trap.S"));
 
@@ -51,13 +48,7 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
         }
         Trap::Interrupt(Interrupt::SupervisorTimer) => {
             set_next_trigger();
-            let times = count_time();
-            debug!("Already running {} msecs", times * 10);
-            if times >= TICKS_PER_SEC * MAX_RUNNING_TIME {
-                exit_current_and_run_next();
-            } else {
-                suspend_current_and_run_next();
-            }
+            schedule_tasks();
         }
         Trap::Exception(Exception::StoreFault) |
         Trap::Exception(Exception::StorePageFault) => {

@@ -1,7 +1,8 @@
 use crate::task::{
     exit_current_and_run_next,
     suspend_current_and_run_next,
-    get_current_task
+    get_current_task,
+    set_current_priority
 };
 use crate::timer::{gettime,};
 
@@ -20,4 +21,8 @@ pub fn sys_yield() -> isize {
 pub fn sys_gettime(ts: *mut usize) -> isize {
     gettime(ts)
     
+}
+
+pub fn sys_setpriority(prio: isize) -> isize {
+    set_current_priority(prio)
 }
